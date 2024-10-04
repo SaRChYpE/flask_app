@@ -1,6 +1,8 @@
 Flask app that I was using for my devops projects.
 
-Just hit python -m flask run to start the app.
+Just build an image with docker build -t .
+
+Then docker run -d -p 5000:5000 image:tag
 
 Feel free to use:)
 
