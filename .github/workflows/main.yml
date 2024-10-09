@@ -40,7 +40,7 @@ jobs:
           echo "::set-output name=image-tag::${IMAGE_TAG}"
        - name: Export Docker image to .tar
          env: 
-           IMAGE_TAG: ${{ steps.get-image-tag.outputs.image-tag }}
+           IMAGE_TAG: ${{ steps.build-docker-image.outputs.image-tag }}
          run: |
           docker save -o flaskapp_image.tar flaskapp:${IMAGE_TAG}
        - name: Upload Docker image tar
