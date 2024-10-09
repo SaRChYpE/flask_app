@@ -26,7 +26,7 @@ jobs:
   build-image:
      runs-on: ubuntu-latest
      outputs:
-       image-tag: ${{ steps.image-tag.outputs.image-tag }}
+       image-tag: ${{ steps.build-docker-image.outputs.image-tag }}
      steps:
        - name: Checkout
          uses: actions/checkout@v2
@@ -36,10 +36,7 @@ jobs:
           IMAGE_TAG: "1.0.0"
          run: |
           docker build -t flaskapp:$IMAGE_TAG .
-       - name: Get image tag
-         id: image-tag
-         run: | 
-           echo "::set-output name=image-tag::${IMAGE_TAG}"
+          echo "::set-output name=image-tag::${IMAGE_TAG}"
           
   deploy:
     name: Deploy to Amazon ECR
