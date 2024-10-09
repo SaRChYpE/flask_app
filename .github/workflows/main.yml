@@ -34,9 +34,18 @@ jobs:
          id: build-docker-image
          env:
           IMAGE_TAG: "1.0.0"
+          ECR_REPOSITORY: ${{ vars.REPO_NAME }}
          run: |
           docker build -t flaskapp:${IMAGE_TAG} .
           echo "::set-output name=image-tag::${IMAGE_TAG}"
+       - name: Export Docker image to .tar
+         run: |
+          docker save -o flaskapp_image.tar flaskapp:${IMAGE_TAG}
+       - name: Upload Docker image tar
+         uses: actions/upload-artifact@v2
+         with:
+          name: flaskapp-image
+          path: flaskapp_image.tar
           
   deploy:
     name: Deploy to Amazon ECR
@@ -57,6 +66,16 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: Download Docker image tar
+        uses: actions/download-artifact@v2
+        with:
+          name: flaskapp-image
+          path: ./
+
+      - name: Load Docker image from .tar
+        run: |
+          docker load -i flaskapp_image.tar
+          
       - name: Push Docker image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
