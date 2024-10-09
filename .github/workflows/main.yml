@@ -57,8 +57,9 @@ jobs:
 
       - name: Push Docker image to Amazon ECR
         env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ vars.REPO_NAME }}
           IMAGE_TAG: ${{ needs.build-image.outputs.image-tag }}
         run: |
-          docker tag flaskapp:${IMAGE_TAG} $ECR_REPOSITORY/flaskapp:${IMAGE_TAG}
-          docker push $ECR_REPOSITORY/flaskapp:${IMAGE_TAG}
+          docker tag flaskapp:${IMAGE_TAG} $ECR_REGISTRY/ECR_REPOSITORY:${IMAGE_TAG}
+          docker push $ECR_REGISTRY/ECR_REPOSITORY:${IMAGE_TAG}
