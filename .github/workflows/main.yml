@@ -35,6 +35,9 @@ jobs:
           IMAGE_TAG: "1.0.0"
          run: |
           docker build -t flaskapp:$IMAGE_TAG .
+       - name: Get image tag
+         run: | 
+           echo "::set-output name=image-tag::${IMAGE_TAG}"
           
   deploy:
     name: Deploy to Amazon ECR
@@ -61,5 +64,5 @@ jobs:
           ECR_REPOSITORY: ${{ vars.REPO_NAME }}
           IMAGE_TAG: ${{ needs.build-image.outputs.image-tag }}
         run: |
-          docker tag flaskapp:${IMAGE_TAG} $ECR_REGISTRY/ECR_REPOSITORY:${IMAGE_TAG}
-          docker push $ECR_REGISTRY/ECR_REPOSITORY:${IMAGE_TAG}
+          docker tag flaskapp:${IMAGE_TAG} ${ECR_REGISTRY}/$ECR_REPOSITORY:${IMAGE_TAG}
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${IMAGE_TAG}
