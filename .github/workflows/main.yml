@@ -24,6 +24,7 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
   
   build-image:
+     needs: build
      runs-on: ubuntu-latest
      outputs:
        image-tag: ${{ steps.build-docker-image.outputs.image-tag }}
